@@ -23,7 +23,7 @@ config.color_scheme = "Catppuccin Mocha"
 
 -- font
 config.font = wezterm.font("JetBrains Mono")
-config.font_size = 18
+config.font_size = 15
 
 -- tab style
 config.window_decorations = "INTEGRATED_BUTTONS"
@@ -49,7 +49,7 @@ end
 
 -- startup wezterm in max size
 wezterm.on("gui-startup", function()
-	local tab, pane, window = mux.spawn_window({})
+	local window = mux.spawn_window({})
 	window:gui_window():maximize()
 end)
 
