@@ -43,13 +43,23 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.window_background_opacity = 0
 	config.win32_system_backdrop = "Mica"
 elseif wezterm.target_triple == "aarch64-apple-darwin" then
-	-- config.window_background_opacity = 0.8
-	-- config.macos_window_background_blur = 20
+	local on_battery = false
+
+	for _, b in ipairs(wezterm.battery_info()) do
+		if b.state == "Discharging" then
+			on_battery = true
+		end
+	end
+
+	if not on_battery then
+		config.window_background_opacity = 0.8
+		config.macos_window_background_blur = 20
+	end
 end
 
 -- startup wezterm in max size
 wezterm.on("gui-startup", function()
-	local window = mux.spawn_window({})
+	local tab, pane, window = mux.spawn_window({})
 	window:gui_window():maximize()
 end)
 
