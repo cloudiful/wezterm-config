@@ -54,6 +54,8 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	if not on_battery then
 		config.window_background_opacity = 0.8
 		config.macos_window_background_blur = 20
+	else
+		wezterm.log_info("Using battery, so no transparent blur effect for background.")
 	end
 end
 
