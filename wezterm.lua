@@ -65,5 +65,11 @@ wezterm.on("gui-startup", function()
 	window:gui_window():maximize()
 end)
 
+-- keybindings
+config.keys = {
+	-- use opt+tab to switch tabs
+	{ key = "Tab", mods = "OPT", action = wezterm.action.ActivateTabRelative(1) },
+}
+
 -- and finally, return the configuration to wezterm
 return config
