@@ -22,7 +22,10 @@ end
 config.color_scheme = "Catppuccin Mocha"
 
 -- font
-config.font = wezterm.font("JetBrains Mono")
+config.font = wezterm.font_with_fallback({
+	"JetBrains Mono",
+	"霞鹜文楷等宽",
+})
 config.font_size = 15
 
 -- tab style
