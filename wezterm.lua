@@ -28,11 +28,16 @@ config.font = wezterm.font_with_fallback({
 })
 config.font_size = 15
 
+-- color
+config.colors = {
+	background = "black",
+}
+
 -- tab style
 config.window_decorations = "INTEGRATED_BUTTONS"
 config.use_fancy_tab_bar = true
 
--- no padding
+-- padding
 config.window_padding = {
 	left = 20,
 	right = 20,
@@ -55,7 +60,7 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	end
 
 	if not on_battery then
-		config.window_background_opacity = 0.8
+		config.window_background_opacity = 0.75
 		config.macos_window_background_blur = 50
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
