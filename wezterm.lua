@@ -39,8 +39,8 @@ config.use_fancy_tab_bar = true
 
 -- padding
 config.window_padding = {
-	left = 20,
-	right = 20,
+	left = 10,
+	right = 10,
 	top = 0,
 	bottom = 0,
 }
@@ -61,7 +61,7 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 
 	if not on_battery then
 		config.window_background_opacity = 0.8
-		config.macos_window_background_blur = 50
+		config.macos_window_background_blur = 60
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
 	end
