@@ -23,8 +23,8 @@ config.color_scheme = "Catppuccin Mocha"
 
 -- font
 config.font = wezterm.font_with_fallback({
-	"JetBrains Mono",
-	"霞鹜文楷等宽",
+	{ family = "JetBrainsMono Nerd Font Mono", weight = "Regular" },
+	{ family = "霞鹜文楷等宽" },
 })
 config.font_size = 15
 
@@ -60,7 +60,7 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	end
 
 	if not on_battery then
-		config.window_background_opacity = 0.8
+		config.window_background_opacity = 0.6
 		config.macos_window_background_blur = 60
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
