@@ -60,7 +60,7 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	end
 
 	if not on_battery then
-		config.window_background_opacity = 0.6
+		config.window_background_opacity = 0.75
 		config.macos_window_background_blur = 60
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
@@ -72,6 +72,44 @@ wezterm.on("gui-startup", function()
 	local tab, pane, window = mux.spawn_window({})
 	window:gui_window():maximize()
 end)
+
+config.keys = {
+	{
+		key = "c",
+		mods = "SUPER",
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
+				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
+			else
+				-- otherwise, treat it as a copy operation
+				window:perform_action(wezterm.action.CopyTo("Clipboard"), pane)
+			end
+		end),
+	},
+	{
+		key = "s",
+		mods = "SUPER",
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
+				window:perform_action(wezterm.action.SendKey({ key = "s", mods = "CTRL" }), pane)
+			else
+			end
+		end),
+	},
+	{
+		key = "z",
+		mods = "SUPER",
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
+				window:perform_action(wezterm.action.SendKey({ key = "z", mods = "CTRL" }), pane)
+			else
+			end
+		end),
+	},
+}
 
 -- and finally, return the configuration to wezterm
 return config
