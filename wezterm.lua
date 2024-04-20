@@ -22,6 +22,7 @@ end
 config.color_scheme = "Catppuccin Mocha"
 
 -- font
+-- need to install JetBrainsMono Nerd Font Mono first
 config.font = wezterm.font_with_fallback({
 	{ family = "JetBrainsMono Nerd Font Mono", weight = "Regular" },
 	{ family = "霞鹜文楷等宽" },
@@ -73,43 +74,7 @@ wezterm.on("gui-startup", function()
 	window:gui_window():maximize()
 end)
 
-config.keys = {
-	{
-		key = "c",
-		mods = "SUPER",
-		action = wezterm.action_callback(function(window, pane)
-			if pane:is_alt_screen_active() then
-				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
-				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
-			else
-				-- otherwise, treat it as a copy operation
-				window:perform_action(wezterm.action.CopyTo("Clipboard"), pane)
-			end
-		end),
-	},
-	{
-		key = "s",
-		mods = "SUPER",
-		action = wezterm.action_callback(function(window, pane)
-			if pane:is_alt_screen_active() then
-				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
-				window:perform_action(wezterm.action.SendKey({ key = "s", mods = "CTRL" }), pane)
-			else
-			end
-		end),
-	},
-	{
-		key = "z",
-		mods = "SUPER",
-		action = wezterm.action_callback(function(window, pane)
-			if pane:is_alt_screen_active() then
-				-- allow "full screen" TUI apps to receive and handle CTRL-C for themselves
-				window:perform_action(wezterm.action.SendKey({ key = "z", mods = "CTRL" }), pane)
-			else
-			end
-		end),
-	},
-}
+config.enable_kitty_keyboard = true
 
 -- and finally, return the configuration to wezterm
 return config
