@@ -69,8 +69,8 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 end
 
 -- startup wezterm in max size
-wezterm.on("gui-startup", function()
-	local tab, pane, window = mux.spawn_window({})
+wezterm.on("gui-startup", function(cmd)
+	local tab, pane, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
 end)
 
