@@ -95,52 +95,44 @@ end)
 
 -- if on Windows uee ALT+wasd to switch pane
 -- if on Mac use CTRL+wasd to switch pane
+local switch_key_mods = ""
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-	config.keys = {
-		{
-			key = "w",
-			mods = "ALT",
-			action = wezterm.action.ActivatePaneDirection("Up"),
-		},
-		{
-			key = "a",
-			mods = "ALT",
-			action = wezterm.action.ActivatePaneDirection("Left"),
-		},
-		{
-			key = "s",
-			mods = "ALT",
-			action = wezterm.action.ActivatePaneDirection("Down"),
-		},
-		{
-			key = "d",
-			mods = "ALT",
-			action = wezterm.action.ActivatePaneDirection("Right"),
-		},
-	}
+	switch_key_mods = "ALT"
 elseif wezterm.target_triple == "aarch64-apple-darwin" then
-	config.keys = {
-		{
-			key = "w",
-			mods = "CTRL",
-			action = wezterm.action.ActivatePaneDirection("Up"),
-		},
-		{
-			key = "a",
-			mods = "CTRL",
-			action = wezterm.action.ActivatePaneDirection("Left"),
-		},
-		{
-			key = "s",
-			mods = "CTRL",
-			action = wezterm.action.ActivatePaneDirection("Down"),
-		},
-		{
-			key = "d",
-			mods = "CTRL",
-			action = wezterm.action.ActivatePaneDirection("Right"),
-		},
-	}
+	switch_key_mods = "CTRL"
+end
+
+-- use switch_key+wasd to switch pane
+config.keys = {
+	{
+		key = "w",
+		mods = switch_key_mods,
+		action = wezterm.action.ActivatePaneDirection("Up"),
+	},
+	{
+		key = "a",
+		mods = switch_key_mods,
+		action = wezterm.action.ActivatePaneDirection("Left"),
+	},
+	{
+		key = "s",
+		mods = switch_key_mods,
+		action = wezterm.action.ActivatePaneDirection("Down"),
+	},
+	{
+		key = "d",
+		mods = switch_key_mods,
+		action = wezterm.action.ActivatePaneDirection("Right"),
+	},
+}
+
+-- use switch_key+number to switch tabs
+for i = 1, 8 do
+	table.insert(config.keys, {
+		key = tostring(i),
+		mods = switch_key_mods,
+		action = wezterm.action.ActivateTab(i - 1),
+	})
 end
 
 config.enable_kitty_keyboard = true
