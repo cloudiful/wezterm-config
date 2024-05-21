@@ -70,9 +70,78 @@ end
 
 -- startup wezterm in max size
 wezterm.on("gui-startup", function(cmd)
-	local tab, pane, window = mux.spawn_window(cmd or {})
+	local tab_mac, pane_mac, window = mux.spawn_window(cmd or {})
+	local tab_nas, pane_nas, _ = window:spawn_tab({})
 	window:gui_window():maximize()
+
+	-- split tab into 3 panes
+	local pane_mac_r = pane_mac:split({ direction = "Right" })
+	local pane_mac_rd = pane_mac_r:split({ direction = "Bottom" })
+	local pane_nas_r = pane_nas:split({ direction = "Right" })
+	local pane_nas_rd = pane_nas_r:split({ direction = "Bottom" })
+
+	-- set titles for the tabs
+	tab_mac:set_title("mac")
+	tab_nas:set_title("nas")
+
+	-- connect to remote server
+	pane_nas:send_text("ssh root@cloudiful.cn\n")
+	pane_nas:send_text("clear\n")
+	pane_nas_r:send_text("ssh root@cloudiful.cn\n")
+	pane_nas_r:send_text("clear\n")
+	pane_nas_rd:send_text("ssh root@cloudiful.cn\n")
+	pane_nas_rd:send_text("clear\n")
 end)
+
+-- if on Windows uee ALT+wasd to switch pane
+-- if on Mac use CTRL+wasd to switch pane
+if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+	config.keys = {
+		{
+			key = "w",
+			mods = "ALT",
+			action = wezterm.action.ActivatePaneDirection("Up"),
+		},
+		{
+			key = "a",
+			mods = "ALT",
+			action = wezterm.action.ActivatePaneDirection("Left"),
+		},
+		{
+			key = "s",
+			mods = "ALT",
+			action = wezterm.action.ActivatePaneDirection("Down"),
+		},
+		{
+			key = "d",
+			mods = "ALT",
+			action = wezterm.action.ActivatePaneDirection("Right"),
+		},
+	}
+elseif wezterm.target_triple == "aarch64-apple-darwin" then
+	config.keys = {
+		{
+			key = "w",
+			mods = "CTRL",
+			action = wezterm.action.ActivatePaneDirection("Up"),
+		},
+		{
+			key = "a",
+			mods = "CTRL",
+			action = wezterm.action.ActivatePaneDirection("Left"),
+		},
+		{
+			key = "s",
+			mods = "CTRL",
+			action = wezterm.action.ActivatePaneDirection("Down"),
+		},
+		{
+			key = "d",
+			mods = "CTRL",
+			action = wezterm.action.ActivatePaneDirection("Right"),
+		},
+	}
+end
 
 config.enable_kitty_keyboard = true
 
