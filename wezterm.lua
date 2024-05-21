@@ -88,7 +88,7 @@ wezterm.on("gui-startup", function(cmd)
 		pane_wsl_r:send_text("wsl\r\nclear\r\n")
 		pane_wsl_rd:send_text("wsl\r\nclear\r\n")
 
-		pane_wsl.activate()
+		pane_wsl:activate()
 	elseif wezterm.target_triple == "aarch64-apple-darwin" then
 		local tab_nas, pane_nas, _ = window:spawn_tab({})
 
