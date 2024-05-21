@@ -15,7 +15,7 @@ end
 
 -- if on Windows then use powershell
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-	config.default_prog = { "powershell.exe" }
+	config.default_prog = { "pwsh.exe" }
 end
 
 -- theme
@@ -49,8 +49,8 @@ config.window_padding = {
 -- add transparent blur to the window
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	-- available on Windows 11 build 22621 and later.
-	config.window_background_opacity = 0
-	config.win32_system_backdrop = "Mica"
+	config.window_background_opacity = 0.9
+	config.win32_system_backdrop = "Auto"
 elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	local on_battery = false
 
@@ -70,49 +70,48 @@ end
 
 -- startup wezterm in max size
 wezterm.on("gui-startup", function(cmd)
-		if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-                local tab, pane, window = mux.spawn_window(cmd or {})
-                local tab_wsl, pane_wsl, _ = window:spawn_tab({})
-                window:gui_window():maximize()
-
-                -- split tab into 3 panes
-                local pane_wsl_r = pane_wsl:split({ direction = "Right" })
-                local pane_wsl_rd = pane_wsl_r:split({ direction = "Bottom" })
-
-                -- set titles for the tabs
-                tab:set_title("windows")
-                tab_wsl:set_title("wsl")
-
-                -- connect to remote server
-                pane_wsl:send_text("wsl\r\nclear\r\n")
-                pane_wsl_r:send_text("wsl\r\nclear\r\n")
-                pane_wsl_rd:send_text("wsl\r\nclear\r\n")
-
-                pane_wsl.activate()
-        elseif wezterm.target_triple == "aarch64-apple-darwin" then
-			local tab_mac, pane_mac, window = mux.spawn_window(cmd or {})
-	local tab_nas, pane_nas, _ = window:spawn_tab({})
+	local tab, pane, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
+	if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+		local tab_wsl, pane_wsl, _ = window:spawn_tab({})
 
-	-- split tab into 3 panes
-	local pane_mac_r = pane_mac:split({ direction = "Right" })
-	local pane_mac_rd = pane_mac_r:split({ direction = "Bottom" })
-	local pane_nas_r = pane_nas:split({ direction = "Right" })
-	local pane_nas_rd = pane_nas_r:split({ direction = "Bottom" })
+		-- split tab into 3 panes
+		local pane_wsl_r = pane_wsl:split({ direction = "Right" })
+		local pane_wsl_rd = pane_wsl_r:split({ direction = "Bottom" })
 
-	-- set titles for the tabs
-	tab_mac:set_title("mac")
-	tab_nas:set_title("nas")
+		-- set titles for the tabs
+		tab:set_title("windows")
+		tab_wsl:set_title("wsl")
 
-	-- connect to remote server
-	pane_nas:send_text("ssh root@cloudiful.cn\n")
-	pane_nas:send_text("clear\n")
-	pane_nas_r:send_text("ssh root@cloudiful.cn\n")
-	pane_nas_r:send_text("clear\n")
-	pane_nas_rd:send_text("ssh root@cloudiful.cn\n")
-	pane_nas_rd:send_text("clear\n")
-        end
-	
+		-- connect to remote server
+		pane_wsl:send_text("wsl\r\nclear\r\n")
+		pane_wsl_r:send_text("wsl\r\nclear\r\n")
+		pane_wsl_rd:send_text("wsl\r\nclear\r\n")
+
+		pane_wsl.activate()
+	elseif wezterm.target_triple == "aarch64-apple-darwin" then
+		local tab_nas, pane_nas, _ = window:spawn_tab({})
+
+		-- split tab into 3 panes
+		local pane_r = pane:split({ direction = "Right" })
+		local pane_rd = pane_r:split({ direction = "Bottom" })
+		local pane_nas_r = pane_nas:split({ direction = "Right" })
+		local pane_nas_rd = pane_nas_r:split({ direction = "Bottom" })
+
+		-- set titles for the tabs
+		tab:set_title("mac")
+		tab_nas:set_title("nas")
+
+		-- connect to remote server
+		pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
+		pane_nas_r:send_text("ssh root@cloudiful.cn\nclear\n")
+		pane_nas_rd:send_text("ssh root@cloudiful.cn\nclear\n")
+
+		pane_nas:activate()
+	end
+
+	tab:activate()
+	pane:activate()
 end)
 
 -- if on Windows uee ALT+wasd to switch pane
