@@ -120,13 +120,31 @@ end)
 -- if on Windows uee ALT+wasd to switch pane
 -- if on Mac use CTRL+wasd to switch pane
 local switch_key_mods = ""
+local clipboard_key_mods = ""
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	switch_key_mods = "ALT"
+	clipboard_key_mods = "CTRL"
 elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	switch_key_mods = "CTRL"
+	clipboard_key_mods = "CMD"
 end
 
 config.keys = {
+	-- if in fullscreen terminal app
+	-- then pass through clipboard_key_mods+c as CTRL+c
+	-- which can be used in neovim to map keys
+	{
+		key = "c",
+		mods = clipboard_key_mods,
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
+			else
+				window:perform_action(wezterm.action.CopyTo("ClipboardAndPrimarySelection"), pane)
+			end
+		end),
+	},
+
 	-- use switch_key+wasd to switch pane
 	{
 		key = "w",
