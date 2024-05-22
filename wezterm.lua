@@ -117,6 +117,8 @@ wezterm.on("gui-startup", function(cmd)
 	pane:activate()
 end)
 
+config.disable_default_key_bindings = true
+
 -- if on Windows uee ALT+wasd to switch pane
 -- if on Mac use CTRL+wasd to switch pane
 local switch_key_mods = ""
@@ -138,11 +140,36 @@ config.keys = {
 		mods = clipboard_key_mods,
 		action = wezterm.action_callback(function(window, pane)
 			if pane:is_alt_screen_active() then
-				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
+				window:perform_action(wezterm.action.SendKey({ key = "c", mods = clipboard_key_mods }), pane)
 			else
-				window:perform_action(wezterm.action.CopyTo("ClipboardAndPrimarySelection"), pane)
+				local has_selection = window:get_selection_text_for_pane(pane) ~= ""
+				if has_selection then
+					window:perform_action(wezterm.action.ClearSelection, pane)
+				else
+					window:perform_action(wezterm.action.SendKey({ key = "c", mods = clipboard_key_mods }), pane)
+				end
 			end
 		end),
+	},
+
+	-- use clipboard_key_mods+v to paste from clipboard
+	{
+		key = "v",
+		mods = clipboard_key_mods,
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				window:perform_action(wezterm.action.SendKey({ key = "v", mods = clipboard_key_mods }), pane)
+			else
+				window:perform_action(wezterm.action.PasteFrom("Clipboard"), pane)
+			end
+		end),
+	},
+
+	-- use clipboard_key_mods+z to undo
+	{
+		key = "z",
+		mods = clipboard_key_mods,
+		action = wezterm.action.SendKey({ key = "z", mods = "CTRL" }),
 	},
 
 	-- use switch_key+wasd to switch pane
@@ -167,8 +194,6 @@ config.keys = {
 		action = wezterm.action.ActivatePaneDirection("Right"),
 	},
 }
-
-config.enable_kitty_keyboard = true
 
 -- and finally, return the configuration to wezterm
 return config
