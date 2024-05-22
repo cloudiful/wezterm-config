@@ -54,14 +54,16 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	local on_battery = false
 
+	-- decide if using battery
 	for _, b in ipairs(wezterm.battery_info()) do
 		if b.state == "Discharging" then
 			on_battery = true
 		end
 	end
 
+	-- if not on battery then enable blur effect
 	if not on_battery then
-		config.window_background_opacity = 0.75
+		config.window_background_opacity = 0.5
 		config.macos_window_background_blur = 60
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
@@ -88,6 +90,7 @@ wezterm.on("gui-startup", function(cmd)
 		pane_wsl_r:send_text("wsl\r\nclear\r\n")
 		pane_wsl_rd:send_text("wsl\r\nclear\r\n")
 
+		tab_wsl:activate()
 		pane_wsl:activate()
 	elseif wezterm.target_triple == "aarch64-apple-darwin" then
 		local tab_nas, pane_nas, _ = window:spawn_tab({})
@@ -123,8 +126,8 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 	switch_key_mods = "CTRL"
 end
 
--- use switch_key+wasd to switch pane
 config.keys = {
+	-- use switch_key+wasd to switch pane
 	{
 		key = "w",
 		mods = switch_key_mods,
@@ -146,15 +149,6 @@ config.keys = {
 		action = wezterm.action.ActivatePaneDirection("Right"),
 	},
 }
-
--- use switch_key+number to switch tabs
-for i = 1, 8 do
-	table.insert(config.keys, {
-		key = tostring(i),
-		mods = switch_key_mods,
-		action = wezterm.action.ActivateTab(i - 1),
-	})
-end
 
 config.enable_kitty_keyboard = true
 
