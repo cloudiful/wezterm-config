@@ -63,7 +63,7 @@ elseif wezterm.target_triple == "aarch64-apple-darwin" then
 
 	-- if not on battery then enable blur effect
 	if not on_battery then
-		config.window_background_opacity = 0.5
+		config.window_background_opacity = 0.75
 		config.macos_window_background_blur = 60
 	else
 		wezterm.log_info("Using battery, so no transparent blur effect for background.")
@@ -140,13 +140,13 @@ config.keys = {
 		mods = clipboard_key_mods,
 		action = wezterm.action_callback(function(window, pane)
 			if pane:is_alt_screen_active() then
-				window:perform_action(wezterm.action.SendKey({ key = "c", mods = clipboard_key_mods }), pane)
+				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
 			else
 				local has_selection = window:get_selection_text_for_pane(pane) ~= ""
 				if has_selection then
 					window:perform_action(wezterm.action.ClearSelection, pane)
 				else
-					window:perform_action(wezterm.action.SendKey({ key = "c", mods = clipboard_key_mods }), pane)
+					window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
 				end
 			end
 		end),
@@ -158,7 +158,7 @@ config.keys = {
 		mods = clipboard_key_mods,
 		action = wezterm.action_callback(function(window, pane)
 			if pane:is_alt_screen_active() then
-				window:perform_action(wezterm.action.SendKey({ key = "v", mods = clipboard_key_mods }), pane)
+				window:perform_action(wezterm.action.SendKey({ key = "v", mods = "CTRL" }), pane)
 			else
 				window:perform_action(wezterm.action.PasteFrom("Clipboard"), pane)
 			end
