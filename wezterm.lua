@@ -12,9 +12,15 @@ if wezterm.config_builder then
 end
 
 -- This is where you actually apply your config choices
+local os_name = ""
+if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+	os_name = "windows"
+elseif wezterm.target_triple == "aarch64-apple-darwin" then
+	os_name = "macos"
+end
 
 -- if on Windows then use powershell
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+if os_name == "windows" then
 	config.default_prog = { "pwsh.exe" }
 end
 
@@ -47,11 +53,11 @@ config.window_padding = {
 }
 
 -- add transparent blur to the window
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+if os_name == "windows" then
 	-- available on Windows 11 build 22621 and later.
 	config.window_background_opacity = 0.9
 	config.win32_system_backdrop = "Auto"
-elseif wezterm.target_triple == "aarch64-apple-darwin" then
+elseif os_name == "macos" then
 	local on_battery = false
 
 	-- decide if using battery
@@ -117,16 +123,14 @@ wezterm.on("gui-startup", function(cmd)
 	pane:activate()
 end)
 
-config.disable_default_key_bindings = true
-
 -- if on Windows uee ALT+wasd to switch pane
 -- if on Mac use CTRL+wasd to switch pane
 local switch_key_mods = ""
 local clipboard_key_mods = ""
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+if os_name == "windows" then
 	switch_key_mods = "ALT"
 	clipboard_key_mods = "CTRL"
-elseif wezterm.target_triple == "aarch64-apple-darwin" then
+elseif os_name == "macos" then
 	switch_key_mods = "CTRL"
 	clipboard_key_mods = "CMD"
 end
@@ -146,7 +150,7 @@ config.keys = {
 				if has_selection then
 					window:perform_action(wezterm.action.ClearSelection, pane)
 				else
-					window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
+					window:perform_action(wezterm.action.SendKey({ key = "c", mods = clipboard_key_mods }), pane)
 				end
 			end
 		end),
@@ -165,11 +169,29 @@ config.keys = {
 		end),
 	},
 
+	-- use clipboard_key_mods+s to save
+	{
+		key = "s",
+		mods = clipboard_key_mods,
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				window:perform_action(wezterm.action.SendKey({ key = "s", mods = "CTRL" }), pane)
+			else
+				window:perform_action(pane:send_text("save"))
+			end
+		end),
+	},
+
 	-- use clipboard_key_mods+z to undo
 	{
 		key = "z",
 		mods = clipboard_key_mods,
-		action = wezterm.action.SendKey({ key = "z", mods = "CTRL" }),
+		action = wezterm.action_callback(function(window, pane)
+			if pane:is_alt_screen_active() then
+				window:perform_action(wezterm.action.SendKey({ key = "z", mods = "CTRL" }), pane)
+			else
+			end
+		end),
 	},
 
 	-- use switch_key+wasd to switch pane
