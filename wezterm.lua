@@ -104,8 +104,6 @@ wezterm.on("gui-startup", function(cmd)
 		-- split tab into 3 panes
 		local pane_r = pane:split({ direction = "Right" })
 		local pane_rd = pane_r:split({ direction = "Bottom" })
-		local pane_nas_r = pane_nas:split({ direction = "Right" })
-		local pane_nas_rd = pane_nas_r:split({ direction = "Bottom" })
 
 		-- set titles for the tabs
 		tab:set_title("mac")
@@ -113,8 +111,6 @@ wezterm.on("gui-startup", function(cmd)
 
 		-- connect to remote server
 		pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
-		pane_nas_r:send_text("ssh root@cloudiful.cn\nclear\n")
-		pane_nas_rd:send_text("ssh root@cloudiful.cn\nclear\n")
 
 		pane_nas:activate()
 	end
@@ -177,7 +173,7 @@ config.keys = {
 			if pane:is_alt_screen_active() then
 				window:perform_action(wezterm.action.SendKey({ key = "s", mods = "CTRL" }), pane)
 			else
-				window:perform_action(pane:send_text("save"))
+				pane:send_text("save")
 			end
 		end),
 	},
@@ -189,7 +185,6 @@ config.keys = {
 		action = wezterm.action_callback(function(window, pane)
 			if pane:is_alt_screen_active() then
 				window:perform_action(wezterm.action.SendKey({ key = "z", mods = "CTRL" }), pane)
-			else
 			end
 		end),
 	},
