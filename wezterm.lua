@@ -80,43 +80,43 @@ end
 wezterm.on("gui-startup", function(cmd)
 	local tab, pane, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
-	if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-		local tab_wsl, pane_wsl, _ = window:spawn_tab({})
+	-- if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+	-- 	local tab_wsl, pane_wsl, _ = window:spawn_tab({})
+	--
+	-- 	-- split tab into 3 panes
+	-- 	local pane_wsl_r = pane_wsl:split({ direction = "Right" })
+	-- 	local pane_wsl_rd = pane_wsl_r:split({ direction = "Bottom" })
+	--
+	-- 	-- set titles for the tabs
+	-- 	tab:set_title("windows")
+	-- 	tab_wsl:set_title("wsl")
+	--
+	-- 	-- connect to remote server
+	-- 	pane_wsl:send_text("wsl\r\nclear\r\n")
+	-- 	pane_wsl_r:send_text("wsl\r\nclear\r\n")
+	-- 	pane_wsl_rd:send_text("wsl\r\nclear\r\n")
+	--
+	-- 	tab_wsl:activate()
+	-- 	pane_wsl:activate()
+	-- elseif wezterm.target_triple == "aarch64-apple-darwin" then
+	-- 	local tab_nas, pane_nas, _ = window:spawn_tab({})
+	--
+	-- 	-- split tab into 3 panes
+	-- 	local pane_r = pane:split({ direction = "Right" })
+	-- 	local pane_rd = pane_r:split({ direction = "Bottom" })
+	--
+	-- 	-- set titles for the tabs
+	-- 	tab:set_title("mac")
+	-- 	tab_nas:set_title("nas")
+	--
+	-- 	-- connect to remote server
+	-- 	pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
+	--
+	-- 	pane_nas:activate()
+	-- end
 
-		-- split tab into 3 panes
-		local pane_wsl_r = pane_wsl:split({ direction = "Right" })
-		local pane_wsl_rd = pane_wsl_r:split({ direction = "Bottom" })
-
-		-- set titles for the tabs
-		tab:set_title("windows")
-		tab_wsl:set_title("wsl")
-
-		-- connect to remote server
-		pane_wsl:send_text("wsl\r\nclear\r\n")
-		pane_wsl_r:send_text("wsl\r\nclear\r\n")
-		pane_wsl_rd:send_text("wsl\r\nclear\r\n")
-
-		tab_wsl:activate()
-		pane_wsl:activate()
-	elseif wezterm.target_triple == "aarch64-apple-darwin" then
-		-- local tab_nas, pane_nas, _ = window:spawn_tab({})
-
-		-- split tab into 3 panes
-		-- local pane_r = pane:split({ direction = "Right" })
-		-- local pane_rd = pane_r:split({ direction = "Bottom" })
-
-		-- set titles for the tabs
-		tab:set_title("mac")
-		-- tab_nas:set_title("nas")
-
-		-- connect to remote server
-		-- pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
-
-		-- pane_nas:activate()
-	end
-
-	tab:activate()
-	pane:activate()
+	-- tab:activate()
+	-- pane:activate()
 end)
 
 -- if on Windows uee ALT+wasd to switch pane
