@@ -33,7 +33,7 @@ config.font = wezterm.font_with_fallback({
 	{ family = "JetBrainsMono Nerd Font Mono", weight = "Regular" },
 	{ family = "霞鹜文楷等宽" },
 })
-config.font_size = 15
+config.font_size = 16
 
 -- color
 config.colors = {
@@ -99,20 +99,20 @@ wezterm.on("gui-startup", function(cmd)
 		tab_wsl:activate()
 		pane_wsl:activate()
 	elseif wezterm.target_triple == "aarch64-apple-darwin" then
-		local tab_nas, pane_nas, _ = window:spawn_tab({})
+		-- local tab_nas, pane_nas, _ = window:spawn_tab({})
 
 		-- split tab into 3 panes
-		local pane_r = pane:split({ direction = "Right" })
-		local pane_rd = pane_r:split({ direction = "Bottom" })
+		-- local pane_r = pane:split({ direction = "Right" })
+		-- local pane_rd = pane_r:split({ direction = "Bottom" })
 
 		-- set titles for the tabs
 		tab:set_title("mac")
-		tab_nas:set_title("nas")
+		-- tab_nas:set_title("nas")
 
 		-- connect to remote server
-		pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
+		-- pane_nas:send_text("ssh root@cloudiful.cn\nclear\n")
 
-		pane_nas:activate()
+		-- pane_nas:activate()
 	end
 
 	tab:activate()
